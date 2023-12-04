@@ -12,7 +12,7 @@ app = Flask(__name__)
 # 모델 불러오기
 model = load_model('./model/1128_model.h5')
 
-with open('class_indices.pkl', 'rb') as f:
+with open('./model/class_indices.pkl', 'rb') as f:
     class_indices = pickle.load(f)
 class_indices = {v: k for k, v in class_indices.items()}
 
