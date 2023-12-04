@@ -5,11 +5,16 @@ from tensorflow.keras.applications.inception_resnet_v2 import preprocess_input
 import numpy as np
 from PIL import Image
 import io
+import pickle
 
 app = Flask(__name__)
 
 # 모델 불러오기
 model = load_model('./model/1128_model.h5')
+
+with open('class_indices.pkl', 'rb') as f:
+    class_indices = pickle.load(f)
+class_indices = {v: k for k, v in class_indices.items()}
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -29,9 +34,10 @@ def predict():
 
     # 가장 높은 확률을 가진 클래스 인덱스 찾기
     predicted_class_index = np.argmax(predictions)
+    predicted_class_label = class_indices[predicted_class_index]
 
     # 결과를 JSON 형식으로 반환
-    return jsonify({'class_id': int(predicted_class_index)})
+    return jsonify({'class_id': predicted_class_label})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
