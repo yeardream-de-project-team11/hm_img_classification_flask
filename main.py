@@ -3,6 +3,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.inception_resnet_v2 import preprocess_input
 import numpy as np
+from PIL import Image
+import io
 
 app = Flask(__name__)
 
@@ -18,7 +20,7 @@ def predict():
         return 'No selected file'
     
     # 이미지 파일을 읽고 전처리하기
-    img = image.load_img(file, target_size=(224, 224))
+    img = Image.open(io.BytesIO(file.read())).resize((224, 224))
     img = image.img_to_array(img)
     img = img.reshape((1, img.shape[0], img.shape[1], img.shape[2]))
     img = preprocess_input(img)
