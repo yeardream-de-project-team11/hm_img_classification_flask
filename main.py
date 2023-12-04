@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 
 # 모델 불러오기
-model = load_model('/model/1128_model.h5')
+model = load_model('./model/1128_model.h5')
 
 @app.route('/predict', methods=['POST'])
 def predict():
