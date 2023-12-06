@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,13 +29,13 @@ jobs:
         curl http://localhost:5000/health
 
   deploy:
-    needs: build_and_test
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Copy docker-compose file to server
+    - name: Copy file to server
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
@@ -55,3 +55,13 @@ jobs:
           docker compose down
           docker compose build
           docker compose up -d
+
+    - name: Test
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          sleep 30
+          curl http://localhost:5000/health
