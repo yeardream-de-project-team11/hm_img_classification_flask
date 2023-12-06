@@ -39,5 +39,9 @@ def predict():
     # 결과를 JSON 형식으로 반환
     return jsonify({'class_id': predicted_class_label})
 
+@app.route('/health', methods=['GET'])
+def health():
+    return "Healthy"
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
