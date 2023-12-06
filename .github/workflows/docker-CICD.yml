@@ -25,6 +25,7 @@ jobs:
 
     - name: Test
       run: |
+        sleep 30
         curl http://localhost:5000/health
 
   deploy:
