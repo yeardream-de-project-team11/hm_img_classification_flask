@@ -25,7 +25,7 @@ jobs:
 
     - name: Test
       run: |
-        curl http://localhost:5000
+        curl http://localhost:5000/predict
 
   deploy:
     needs: build_and_test
