@@ -3,5 +3,10 @@ services:
   app:
       build: .
       restart: unless-stopped
+      environment:
+        - MODEL_RUN_ID=b380e59f20044ccfb914e0e90b9516c8
+        - MLFLOW_URI=http://11teamoracle.duckdns.org:9005
+      env_file:
+        - .env
       ports:
         - 9009:5000

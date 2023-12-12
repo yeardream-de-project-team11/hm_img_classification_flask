@@ -2,19 +2,33 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.inception_resnet_v2 import preprocess_input
+import mlflow.pyfunc
 import numpy as np
 from PIL import Image
 import io
 import pickle
+import os
+
+
+mlflow_server_uri =  os.getenv('MLFLOW_URI', 'default_uri')
+run_id = os.getenv('MODEL_RUN_ID', 'default_id')
 
 app = Flask(__name__)
 
-# 모델 불러오기
-model = load_model('./model/1128_model.h5')
 
 with open('./model/class_indices.pkl', 'rb') as f:
     class_indices = pickle.load(f)
 class_indices = {v: k for k, v in class_indices.items()}
+
+
+# 외부 MLflow 서버의 주소
+mlflow.set_tracking_uri(mlflow_server_uri)
+
+# 모델의 URI 설정
+model_uri = f"runs:/{run_id}/model"
+
+# 모델 로드
+model = mlflow.pyfunc.load_model(model_uri)
 
 @app.route('/predict', methods=['POST'])
 def predict():
