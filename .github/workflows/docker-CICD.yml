@@ -25,7 +25,7 @@ jobs:
 
     - name: Test
       run: |
-        sleep 30
+        sleep 60
         curl http://localhost:5000/health
 
     - name: action-slack
